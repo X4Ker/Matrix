@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+
 using namespace std;
 
 const string errmsg = "An error has occured while reading input data\r\n";
@@ -26,28 +27,7 @@ public:
 
     matrix_t();
     matrix_t(matrix_t const & matrix);
-    matrix_t & operator = (matrix_t const & matrix) {
-        if (this != &matrix) {
-            for (unsigned int i = 0; i < rows; ++i) {
-                delete[] data[i];
-            }
-            delete[] data;
-
-            rows = matrix.rows;
-            columns = matrix.columns;
-            data = new float *[rows];
-            for (unsigned int i = 0; i < rows; ++i) {
-                data[i] = new float[columns];
-            }
-            for (unsigned int i = 0; i < rows; ++i) {
-                for (unsigned int j = 0; j < columns; ++j) {
-                    data[i][j] = matrix.data[i][j];
-                }
-            }
-        }
-
-        return *this;
-    }
+    matrix_t & operator = (matrix_t const & matrix);
 
 };
 
@@ -68,6 +48,29 @@ matrix_t::matrix_t(matrix_t const & matrix) {
             data[i][j] = matrix.data[i][j];
         }
     }
+}
+
+matrix_t & matrix_t::operator = (matrix_t const & matrix) {
+if (this != &matrix) {
+    for (unsigned int i = 0; i < rows; ++i) {
+        delete[] data[i];
+    }
+    delete[] data;
+
+    rows = matrix.rows;
+    columns = matrix.columns;
+    data = new float *[rows];
+    for (unsigned int i = 0; i < rows; ++i) {
+        data[i] = new float[columns];
+    }
+    for (unsigned int i = 0; i < rows; ++i) {
+        for (unsigned int j = 0; j < columns; ++j) {
+            data[i][j] = matrix.data[i][j];
+        }
+    }
+}
+
+return *this;
 }
 
 
@@ -172,7 +175,7 @@ int main()
     int opcode = 0;
     int p = -1;
 
-    for(int i = 0; i < str.length(); i++) {
+    for(int i = 0; i < str.length(); i++) { 
         switch (str[i]) {
             case '+':
             case '-':
@@ -190,7 +193,7 @@ int main()
         stream >> str1 >> symbol >> str2;
         if (str[p] == 'T') {
             outmatr = inmatr1.trans();
-        } else
+        } else 
         {
             ifstream ifs1;
             ifs1.open("/root/" + str1);
