@@ -26,6 +26,7 @@ public:
     std::ostream & write(std::ostream & stream);
 
     matrix_t();
+    ~matrix_t();
     matrix_t(matrix_t const & matrix);
     matrix_t & operator = (matrix_t const & matrix);
 
@@ -35,6 +36,13 @@ matrix_t::matrix_t() {
     data = nullptr;
     rows = 0;
     columns = 0;
+}
+
+matrix_t::~matrix_t() {
+    for (unsigned int i = 0; i < rows; ++i) {
+        delete[] data[i];
+    }
+    delete[] data;
 }
 
 matrix_t::matrix_t(matrix_t const & matrix) {
