@@ -2,7 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-
 using namespace std;
 
 const string errmsg = "An error has occured while reading input data\r\n";
@@ -87,13 +86,12 @@ matrix_t matrix_t::add(matrix_t & other) {
         errflg = true;
         return *this;
     }
-    matrix_t* newmatr = new matrix_t(other);
     for (unsigned int i = 0; i < rows; i++) {
         for (unsigned int j = 0; j < columns; j++) {
-            newmatr->data[i][j] = data[i][j] + other.data[i][j];
+            this->data[i][j] = data[i][j] + other.data[i][j];
         }
     }
-    return *newmatr;
+    return *this;
 }
 
 matrix_t matrix_t::sub(matrix_t & other) {
@@ -101,13 +99,12 @@ matrix_t matrix_t::sub(matrix_t & other) {
         errflg = true;
         return *this;
     }
-    matrix_t* newmatr = new matrix_t(other);
     for (unsigned int i = 0; i < rows; i++) {
         for (unsigned int j = 0; j < columns; j++) {
-            newmatr->data[i][j] = data[i][j] - other.data[i][j];
+            this->data[i][j] = data[i][j] - other.data[i][j];
         }
     }
-    return *newmatr;
+    return *this;
 }
 
 matrix_t matrix_t::mul(matrix_t & other) {
@@ -115,26 +112,24 @@ matrix_t matrix_t::mul(matrix_t & other) {
         errflg = true;
         return *this;
     }
-    matrix_t* newmatr = new matrix_t(other);
     for (unsigned int i = 0; i < rows; i++) {
         for (unsigned int j = 0; j < other.columns; j++) {
-            newmatr->data[i][j] = 0;
+            this->data[i][j] = 0;
             for (unsigned int r = 0; r < columns; r++) {
-                newmatr->data[i][j] += data[i][r] * other.data[r][j];
+                this->data[i][j] += data[i][r] * other.data[r][j];
             }
         }
     }
-    return *newmatr;
+    return *this;
 }
 
 matrix_t matrix_t::trans() {
-    matrix_t* newmatr = new matrix_t();
     for (unsigned int i = 0; i < rows; i++) {
         for (unsigned int j = 0; j < columns; j++) {
-            newmatr->data[j][i] = data[i][j];
+            this->data[j][i] = data[i][j];
         }
     }
-    return *newmatr;
+    return *this;
 }
 
 std::ifstream& matrix_t::read(std::ifstream & stream) {
@@ -183,7 +178,7 @@ int main()
     int opcode = 0;
     int p = -1;
 
-    for(int i = 0; i < str.length(); i++) { 
+    for(int i = 0; i < str.length(); i++) {
         switch (str[i]) {
             case '+':
             case '-':
@@ -198,15 +193,16 @@ int main()
         char symbol;
         string str1, str2;
         istringstream stream(str);
-        stream >> str1 >> symbol >> str2;
-        if (str[p] == 'T') {
+        stream >> str1 >> symbol;
+        ifstream ifs1;
+        ifs1.open("/root/" + str1);
+        inmatr1.read(ifs1);
+        ifs1.close();
+        if (symbol == 'T') {
             outmatr = inmatr1.trans();
-        } else 
-        {
-            ifstream ifs1;
-            ifs1.open("/root/" + str1);
-            inmatr1.read(ifs1);
-            ifs1.close();
+        }
+        else {
+            stream >> str2;
             ifstream ifs2;
             ifs2.open("/root/" + str2);
             inmatr2.read(ifs2);
@@ -233,3 +229,4 @@ int main()
     cin.get();
     return 0;
 }
+
