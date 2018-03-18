@@ -84,52 +84,75 @@ return *this;
 matrix_t matrix_t::add(matrix_t & other) {
     if ((columns != other.columns) || (rows != other.rows)) {
         errflg = true;
-        return *this;
+        cout << "error" << endl;
+        exit(-1);
     }
+    matrix_t result;
+    result.columns = columns;
+    result.rows = rows;
+    result.data = new float *[rows];
     for (unsigned int i = 0; i < rows; i++) {
+        result.data[i] = new float [columns];
         for (unsigned int j = 0; j < columns; j++) {
-            this->data[i][j] = data[i][j] + other.data[i][j];
+            result.data[i][j] = data[i][j] + other.data[i][j];
         }
     }
-    return *this;
+    return result;
 }
 
 matrix_t matrix_t::sub(matrix_t & other) {
     if ((columns != other.columns) || (rows != other.rows)) {
         errflg = true;
-        return *this;
+        cout << "error" << endl;
+        exit(-1);
     }
+    matrix_t result;
+    result.columns = columns;
+    result.rows = rows;
+    result.data = new float *[rows];
     for (unsigned int i = 0; i < rows; i++) {
+        result.data[i] = new float [columns];
         for (unsigned int j = 0; j < columns; j++) {
-            this->data[i][j] = data[i][j] - other.data[i][j];
+            result.data[i][j] = data[i][j] - other.data[i][j];
         }
     }
-    return *this;
+    return result;
 }
 
 matrix_t matrix_t::mul(matrix_t & other) {
-    if (columns != other.rows) {
+    if ((columns != other.columns) || (rows != other.rows)) {
         errflg = true;
-        return *this;
+        cout << "error" << endl;
+        exit(-1);
     }
+    matrix_t result;
+    result.columns = columns;
+    result.rows = rows;
+    result.data = new float *[rows];
     for (unsigned int i = 0; i < rows; i++) {
-        for (unsigned int j = 0; j < other.columns; j++) {
-            this->data[i][j] = 0;
+        result.data[i] = new float [columns];
+        for (unsigned int j = 0; j < columns; j++) {
+            result.data[i][j] = 0.0f;
             for (unsigned int r = 0; r < columns; r++) {
-                this->data[i][j] += data[i][r] * other.data[r][j];
+                result.data[i][j] += data[i][r] * other.data[r][j];
             }
         }
     }
-    return *this;
+    return result;
 }
 
 matrix_t matrix_t::trans() {
-    for (unsigned int i = 0; i < rows; i++) {
-        for (unsigned int j = 0; j < columns; j++) {
-            this->data[j][i] = data[i][j];
+    matrix_t result;
+    result.columns = rows;
+    result.rows = columns;
+    result.data = new float *[result.rows];
+    for (unsigned int i = 0; i < result.rows; i++) {
+        result.data[i] = new float [result.columns];
+        for (unsigned int j = 0; j < result.columns; j++) {
+            result.data[i][j] = data[j][i];
         }
     }
-    return *this;
+    return result;
 }
 
 std::ifstream& matrix_t::read(std::ifstream & stream) {
@@ -229,4 +252,3 @@ int main()
     cin.get();
     return 0;
 }
-
