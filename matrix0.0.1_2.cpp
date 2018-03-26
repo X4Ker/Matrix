@@ -1,27 +1,26 @@
-#include <iostream>
+#include <cassert>
 #include <fstream>
+#include <iostream>
 #include <sstream>
-#include <string>
-using namespace std;
 
-const string errmsg = "An error has occured while reading input data\r\n";
-bool errflg = false;
+using namespace std;
 
 class matrix_t {
 
     float ** data;
     unsigned int rows;
     unsigned int columns;
+
 public:
 
-    matrix_t add(matrix_t & other);
-    matrix_t sub(matrix_t & other);
-    matrix_t mul(matrix_t & other);
+    matrix_t const add(matrix_t const & other);
+    matrix_t const sub(matrix_t const & other);
+    matrix_t const mul(matrix_t const & other);
     matrix_t trans();
 //    matrix_t void write();
 
 
-    std::ifstream & read(std::ifstream & stream);
+    std::ifstream const & read(std::ifstream & stream);
     std::ostream & write(std::ostream & stream);
 
     matrix_t();
@@ -80,13 +79,9 @@ if (this != &matrix) {
 return *this;
 }
 
+const matrix_t matrix_t ::add(matrix_t const & other) {
+    assert((columns == other.columns) && (rows == other.rows));
 
-matrix_t matrix_t::add(matrix_t & other) {
-    if ((columns != other.columns) || (rows != other.rows)) {
-        errflg = true;
-        cout << "error" << endl;
-        exit(-1);
-    }
     matrix_t result;
     result.columns = columns;
     result.rows = rows;
@@ -100,12 +95,9 @@ matrix_t matrix_t::add(matrix_t & other) {
     return result;
 }
 
-matrix_t matrix_t::sub(matrix_t & other) {
-    if ((columns != other.columns) || (rows != other.rows)) {
-        errflg = true;
-        cout << "error" << endl;
-        exit(-1);
-    }
+const matrix_t matrix_t::sub(matrix_t const & other) {
+    assert((columns == other.columns) && (rows == other.rows));
+
     matrix_t result;
     result.columns = columns;
     result.rows = rows;
@@ -119,12 +111,9 @@ matrix_t matrix_t::sub(matrix_t & other) {
     return result;
 }
 
-matrix_t matrix_t::mul(matrix_t & other) {
-    if ((columns != other.columns) || (rows != other.rows)) {
-        errflg = true;
-        cout << "error" << endl;
-        exit(-1);
-    }
+const matrix_t matrix_t::mul(matrix_t const & other) {
+    assert((columns == other.columns) && (rows == other.rows));
+
     matrix_t result;
     result.columns = columns;
     result.rows = rows;
@@ -155,8 +144,7 @@ matrix_t matrix_t::trans() {
     return result;
 }
 
-std::ifstream& matrix_t::read(std::ifstream & stream) {
-    try {
+std::ifstream const & matrix_t::read(std::ifstream  & stream) {
         string s;
         int p;
         getline(stream, s);
@@ -174,12 +162,7 @@ std::ifstream& matrix_t::read(std::ifstream & stream) {
             }
         }
     }
-    catch (exception e) {
-        cout << errmsg;
-        errflg = true;
-    }
-    return stream;
-}
+
 
 std::ostream& matrix_t::write(std::ostream & stream) {
     for (unsigned int i = 0; i < rows; i++) {
