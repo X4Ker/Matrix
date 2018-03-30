@@ -20,8 +20,8 @@ public:
 //    matrix_t void write();
 
 
-    std::ifstream const & read(std::ifstream & stream);
-    std::ostream & write(std::ostream & stream);
+    std::ifstream & read(std::ifstream & stream);
+    std::ostream & write(std::ostream & stream) const ;
 
     matrix_t();
     ~matrix_t();
@@ -144,7 +144,7 @@ matrix_t matrix_t::trans() {
     return result;
 }
 
-std::ifstream const & matrix_t::read(std::ifstream  & stream) {
+std::ifstream & matrix_t::read(std::ifstream  & stream) {
         string s;
         int p;
         getline(stream, s);
@@ -164,7 +164,7 @@ std::ifstream const & matrix_t::read(std::ifstream  & stream) {
     }
 
 
-std::ostream& matrix_t::write(std::ostream & stream) {
+std::ostream& matrix_t::write(std::ostream & stream) const {
     for (unsigned int i = 0; i < rows; i++) {
         for (unsigned int j = 0; j < columns; j++) {
             if (j > 0) cout << ' ';
